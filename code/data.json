@@ -1,0 +1,19 @@
+{
+    "users": [
+      {
+        "name": "Julien",
+        "prenom": "Bambino",
+        "email": "jujules93.doe@example.com",
+        "password": "oeoeoee1245",
+        "message": "Yo !"
+      },
+      {
+        "name": "Jane",
+        "prenom": "Doe",
+        "email": "jane.doe@example.com",
+        "password": "mot2passe",
+        "message": "bonjour"
+      }
+    ]
+  }
+  
