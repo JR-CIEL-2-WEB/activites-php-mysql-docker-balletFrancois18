@@ -8,45 +8,54 @@ function verifierFormulaire() {
   const formCheckInput = document.getElementById('formCheck-1');
   const formCheckLabel = document.querySelector('.form-check-label');
 
-  if (emailInput.value == '' || !emailInput.value.includes('@')) {
-    emailInput.style.borderColor = "red";
-  } else {
-    emailInput.style.borderColor = "green";
-  }
-  
-  if (passwordInput.value == '') {
-    passwordInput.style.borderColor = "red";
+  let isValid = true;
 
-  } else if (passwordInput.value.length = 8) {
-    passwordInput.style.borderColor = "red";
-    errorPassword.classList.remove('invisible');
+  if (baliseNom.value == '') {
+      baliseNom.style.borderColor = "red";
+      isValid = false;
   } else {
-    passwordInput.style.borderColor = "green";
-    errorPassword.classList.add('invisible');
-  }
-  
-
-  if (formCheckInput.checked) {
-    formCheckLabel.style.color = "green";
-  } else {
-    formCheckLabel.style.color = "red";
+      baliseNom.style.borderColor = "";
   }
 
-  if (nameInput.value == '') {
-      nameInput.style.borderColor = "red";
+  if (balisePrénom.value == '') {
+      balisePrénom.style.borderColor = "red";
+      isValid = false;
   } else {
-      nameInput.style.borderColor = "green";
+      balisePrénom.style.borderColor = "";
   }
 
-  if (prenomInput.value == '') {
-      prenomInput.style.borderColor = "red";
+  if (baliseEmail.value == '' || !baliseEmail.value.includes('@')) {
+      baliseEmail.style.borderColor = "red";
+      isValid = false;
   } else {
-      prenomInput.style.borderColor = "green";
+      baliseEmail.style.borderColor = "";
   }
 
-  if (messageInput.value == '') {
-    messageInput.style.borderColor = "red";
-} else {
-    messageInput.style.borderColor = "green";
+  if (balisePassword.value == '') {
+      balisePassword.style.borderColor = "red";
+      isValid = false;
+  } else if (balisePassword.value.length < 8){
+      BaliseErrorpassword.classList.remove('invisible');
+      balisePassword.style.borderColor = "red";
+      isValid = false;
+  } else {
+      balisePassword.style.borderColor = "";
+      BaliseErrorpassword.classList.add('invisible');
   }
+
+  if (baliseMessage.value == '') {
+      baliseMessage.style.borderColor = "red";
+      isValid = false;
+  } else {
+      baliseMessage.style.borderColor = "";
+  }
+
+  if (baliseCheckbox.checked) {
+      baliseLabel.style.color = "";
+  } else {
+      baliseLabel.style.color = "red";
+      isValid = false;
+  }
+ 
+  return isValid;
 }
