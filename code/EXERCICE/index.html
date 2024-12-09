@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 4.2</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+    // Affiche une alerte au lancement de la page
+    alert("Bienvenue ! Sélection de 5 chiffres aléatoires en cours...");
+
+    // Générer 5 chiffres aléatoires
+    const randomNumbers = Array.from({ length: 5 }, () => Math.floor(Math.random() * 100) + 1);
+
+    console.log("Chiffres générés :", randomNumbers);
+
+    // Envoyer les chiffres au serveur Mock
+    try {
+        const mockResponse = await fetch("https://<votre-mock-server-url>", { // Remplacez par l'URL du serveur Mock
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ numbers: randomNumbers })
+        });
+
+        if (!mockResponse.ok) {
+            throw new Error("Erreur lors de la communication avec le serveur Mock");
+        }
+
+        const mockData = await mockResponse.json();
+        console.log("Réponse du serveur Mock :", mockData);
+
+        // Envoyer les données au backend (main.php)
+        const serverResponse = await fetch("main.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ numbers: mockData.numbers })
+        });
+
+        if (!serverResponse.ok) {
+            throw new Error("Erreur lors de la communication avec le serveur principal");
+        }
+
+        const serverData = await serverResponse.json();
+        console.log("Réponse du serveur principal :", serverData);
+
+        // Afficher les chiffres triés et la médiane
+        const resultContainer = document.getElementById("result");
+        resultContainer.textContent = `Chiffres triés : ${serverData.data.numbers.join(", ")}, Médiane : ${serverData.data.median}`;
+    } catch (error) {
+        console.error("Erreur :", error);
+    }
+});
+    </script>
+</head>
+<body>
+    <h1>Exercice 4.2</h1>
+    <p id="result">Chargement des données...</p>
+</body>
+</html>
