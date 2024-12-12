@@ -85,51 +85,56 @@
                     map: null
                 });
 
-                $.ajax({
-                    url: "course.json",
-                    method: "GET",
-                    dataType: "json",
-                    success: function(courses) {
-                        allCoursesData = courses;
+                // Charger les courses
+                loadCourses();
+            }
+        });
+    }
 
-                        for (let i = 0; i < courses.length; i++) {
-                            const course = courses[i];
-                            const courseCoordinates = course.coordinates.map(coord => ({
-                                lat: coord.lat,
-                                lng: coord.lng
-                            }));
+    function loadCourses() {
+        $.ajax({
+            url: "course.json",
+            method: "GET",
+            dataType: "json",
+            success: function(courses) {
+                allCoursesData = courses;
 
-                            const markersForCourse = [];
-                            const polylineForCourse = new google.maps.Polyline({
-                                path: courseCoordinates,
-                                geodesic: true,
-                                strokeColor: "#FF0000",
-                                strokeOpacity: 1.0,
-                                strokeWeight: 3,
-                                map: null
-                            });
+                for (let i = 0; i < courses.length; i++) {
+                    const course = courses[i];
+                    const courseCoordinates = course.coordinates.map(coord => ({
+                        lat: coord.lat,
+                        lng: coord.lng
+                    }));
 
-                            courseCoordinates.forEach((coord, index) => {
-                                const courseMarker = new google.maps.Marker({
-                                    position: coord,
-                                    map: null, 
-                                    title: course.name + " Point " + (index + 1)
-                                });
-                                markersForCourse.push(courseMarker);
-                            });
+                    const markersForCourse = [];
+                    const polylineForCourse = new google.maps.Polyline({
+                        path: courseCoordinates,
+                        geodesic: true,
+                        strokeColor: "#FF0000",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 3,
+                        map: null
+                    });
 
-                            courseMarkers.push(markersForCourse);
-                            coursePolylines.push(polylineForCourse);
-                        }
-
-                        $('#courseSelect').on('change', function() {
-                            const selectedCourse = $(this).val();
-                            displaySelectedCourse(selectedCourse);
+                    courseCoordinates.forEach((coord, index) => {
+                        const courseMarker = new google.maps.Marker({
+                            position: coord,
+                            map: null, 
+                            title: course.name + " Point " + (index + 1)
                         });
+                        markersForCourse.push(courseMarker);
+                    });
 
-                        displaySelectedCourse('none');
-                    }
+                    courseMarkers.push(markersForCourse);
+                    coursePolylines.push(polylineForCourse);
+                }
+
+                $('#courseSelect').on('change', function() {
+                    const selectedCourse = $(this).val();
+                    displaySelectedCourse(selectedCourse);
                 });
+
+                displaySelectedCourse('none');
             }
         });
     }
@@ -160,6 +165,10 @@
         for (let i = 0; i < courseMarkers[index].length; i++) {
             courseMarkers[index][i].setMap(map);
         }
+
+        // Écho du JSON des markers
+        const selectedCourseMarkers = allCoursesData[index].coordinates;
+        console.log("Markers pour la course:", JSON.stringify(selectedCourseMarkers, null, 2));
     }
 
     window.onload = initMap;
